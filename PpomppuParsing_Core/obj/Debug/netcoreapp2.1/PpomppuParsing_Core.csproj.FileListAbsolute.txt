@@ -1,0 +1,11 @@
+D:\PemtoSRC\개인\PpomppuParsing_Core\PpomppuParsing_Core\bin\Debug\netcoreapp2.1\PpomppuParsing_Core.deps.json
+D:\PemtoSRC\개인\PpomppuParsing_Core\PpomppuParsing_Core\bin\Debug\netcoreapp2.1\PpomppuParsing_Core.runtimeconfig.json
+D:\PemtoSRC\개인\PpomppuParsing_Core\PpomppuParsing_Core\bin\Debug\netcoreapp2.1\PpomppuParsing_Core.runtimeconfig.dev.json
+D:\PemtoSRC\개인\PpomppuParsing_Core\PpomppuParsing_Core\bin\Debug\netcoreapp2.1\PpomppuParsing_Core.dll
+D:\PemtoSRC\개인\PpomppuParsing_Core\PpomppuParsing_Core\obj\Debug\netcoreapp2.1\PpomppuParsing_Core.csproj.CoreCompileInputs.cache
+D:\PemtoSRC\개인\PpomppuParsing_Core\PpomppuParsing_Core\obj\Debug\netcoreapp2.1\PpomppuParsing_Core.AssemblyInfoInputs.cache
+D:\PemtoSRC\개인\PpomppuParsing_Core\PpomppuParsing_Core\obj\Debug\netcoreapp2.1\PpomppuParsing_Core.AssemblyInfo.cs
+D:\PemtoSRC\개인\PpomppuParsing_Core\PpomppuParsing_Core\bin\Debug\netcoreapp2.1\PpomppuParsing_Core.pdb
+D:\PemtoSRC\개인\PpomppuParsing_Core\PpomppuParsing_Core\obj\Debug\netcoreapp2.1\PpomppuParsing_Core.csprojAssemblyReference.cache
+D:\PemtoSRC\개인\PpomppuParsing_Core\PpomppuParsing_Core\obj\Debug\netcoreapp2.1\PpomppuParsing_Core.dll
+D:\PemtoSRC\개인\PpomppuParsing_Core\PpomppuParsing_Core\obj\Debug\netcoreapp2.1\PpomppuParsing_Core.pdb
