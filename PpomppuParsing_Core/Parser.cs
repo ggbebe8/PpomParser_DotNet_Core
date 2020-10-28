@@ -125,6 +125,8 @@ namespace PpomppuParsing_Core
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                //request.ContentType = "application/x-www-form-urlencoded; charset=EUC-KR";
+                //Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.Default);
                 String strHtml = reader.ReadToEnd();

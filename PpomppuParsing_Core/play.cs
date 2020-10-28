@@ -17,10 +17,21 @@ namespace PpomppuParsing_Core
         string mStartStr = "";
         string mLastStr = "";
         public List<string> mFindGoods = new List<string>();
-        List<string> mGetInfoList = new List<string>();
+       
         List<string> mChkInfoList = new List<string>();
+        List<stSearched> mSearchedItem = new List<stSearched>();
 
-        bool mExit = false;
+        struct stSearched
+        {
+            public string sItem;
+            public DateTime dtAddDate;
+            public stSearched(string item, DateTime dateTime)
+            {
+                sItem = item;
+                dtAddDate = dateTime;
+            }
+        }
+        
 
         #endregion 전역변수_End
 
@@ -30,6 +41,7 @@ namespace PpomppuParsing_Core
             mURL = "http://www.ppomppu.co.kr/zboard/zboard.php?id=ppomppu&page=1&divpage=53";
             mStartStr = "<font class=list_title>";
             mLastStr = "</font>";
+            Log.Info("Start");
             fnFileRead();
         }
 
@@ -44,9 +56,11 @@ namespace PpomppuParsing_Core
             try
             {
                 string strList = "";
-                StreamReader objReader = new StreamReader(@".\List.ps");
-                strList = objReader.ReadLine().Trim();
-                objReader.Close();
+                using (StreamReader objReader = new StreamReader(@".\List.ps"))
+                {
+                    strList = objReader.ReadLine().Trim();
+                    objReader.Close();
+                }
 
                 string[] tempItem = new string[] { };
                 tempItem = strList.Split('|');
@@ -80,18 +94,23 @@ namespace PpomppuParsing_Core
 
             try
             {
+                
                 if(!File.Exists(@".\List.ps"))
                 {
                     File.Create(@".\List.ps");
                 }
-                StreamWriter objWriter = new StreamWriter(@".\List.ps", false);
-                objWriter.Write(strSumList);
-                objWriter.Close();
+
+                using (StreamWriter objWriter = new StreamWriter(@".\List.ps", false))
+                {
+                    objWriter.Write(strSumList);
+                    objWriter.Close();
+                }
+
                 return;
             }
             catch (Exception e)
             {
-                //MessageBox.Show(e.ToString(), "오 류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Info(string.Format("fnFileWrite() : {0}", e.ToString()));
                 return;
             }
         }
@@ -99,33 +118,58 @@ namespace PpomppuParsing_Core
         //알림
         public void fnAlarm()
         {
+            List<string> GetInfoList = new List<string>();
             string strFindOK = "";
 
-            mGetInfoList = Paser.GetInfo(mURL, mStartStr, mLastStr);
-            if (mGetInfoList.Count < 1)
+            GetInfoList = Paser.GetInfo(mURL, mStartStr, mLastStr);
+
+            if (GetInfoList.Count < 1)
             {
-                //MessageBox.Show("정보를 파싱할 수 없음", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Info(string.Format("fnAlarm() : 파싱된 정보가 없음"));
             }
+
+            TimeSpan ts;
+            for (int i = 0; i < mSearchedItem.Count; i++)
+            {
+                //검색된 리스트는 하루 지나면 삭제
+                ts = DateTime.Now - mSearchedItem[i].dtAddDate;
+                if (ts.Days > 0)
+                {
+                    mSearchedItem.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+
+                //이미 검색된 거라면 보낼 메세지에서 제거
+                for (int x = 0; x < GetInfoList.Count; x++)
+                {
+                    if (GetInfoList[x].Contains(mSearchedItem[i].sItem))
+                    {
+                        GetInfoList.RemoveAt(x);
+                        x--;
+                    }
+                }
+
+
+            } 
 
             foreach (string wantToFind in mFindGoods)
             {
 
-                for (int i = 0; i < mGetInfoList.Count; i++)
+                for (int i = 0; i < GetInfoList.Count; i++)
                 {
-                    if (mChkInfoList.Contains(mGetInfoList[i]))
-                        continue;
-
-                    else if (mGetInfoList[i].Contains(wantToFind.ToUpper()))    //무조건 대문자로 변환
+                    if (GetInfoList[i].Contains(wantToFind.ToUpper()))    //무조건 대문자로 변환
                     {
-                        strFindOK += mGetInfoList[i] + Environment.NewLine;
-                        mChkInfoList.Add(mGetInfoList[i]);
+                        strFindOK += GetInfoList[i] + Environment.NewLine;
+                        stSearched searched = new stSearched(GetInfoList[i], DateTime.Now);
+                        mSearchedItem.Add(searched);
                     }
                 }
             }
 
-            if (mChkInfoList.Count > 100)
+            if (mSearchedItem.Count > 100)
             {
-                mChkInfoList.RemoveRange(0, 50);
+                mSearchedItem.RemoveRange(0, 50);
             }
 
             if (strFindOK != "")
